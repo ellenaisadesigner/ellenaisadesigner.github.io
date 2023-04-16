@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAPPY BIRTHDAY</title>
+</head>
+<style type="text/css">
+    audio{
+            display: none;
+        }
+   </style>
+<body>
+<audio style="display:none; height: 0" id="bg-music" preload="auto" src="meet.mp3" loop="loop"></audio>
+<div style="text-align:center;margin:auto;padding-top:10%">
+Hi 亲爱的吴老师，这是我们认识的第四年啦，也是我陪你度过的第三个生日。<br>
+没有华丽的仪式，也没有贵重的礼物。<br>
+词不达意，但音乐可以。<br>
+从前觉得每次分离都是世界上最糟糕的事情。<br>
+但现在觉得健在的离别是世界上第二浪漫的事，<br>
+从此之后每一次“遇到”都是重逢，<br>
+而重逢是世界上第一浪漫的事。<br>
+生日快乐💙
+</div>
+<div id="bgmvideo"></div>
+</body>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        function audioAutoPlay() {
+            var audio = document.getElementById('bg-music');
+                audio.play();
+            document.addEventListener("WeixinJSBridgeReady", function () {
+                audio.play();
+            }, false);
+        }
+        audioAutoPlay();
+    });
+</script>
+</html>
