@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>FROM DOLLARS TO YEARS</title>
+  <meta name="author" content="Matthew Howell" />
+  <meta name="description" content="fullPage continuous scrolling demo." />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <meta name="keywords" content="fullpage,jquery,demo,scroll,loop,continuous" />
+  <meta name="Resource-type" content="Document" />
+  <link rel="stylesheet" type="text/css" href="dist/fullpage.css" />
+  <link rel="stylesheet" type="text/css" href="examples.css" />
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+  <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+  <!-- Create a div where the graph will take place -->
+
+  <style>
+    /* Overwriting styles for navigation bullets
+	* --------------------------------------- */
+    #fp-nav ul li a span,
+    .fp-slidesNav ul li a span {
+      background: #587fec;
+    }
+
+    .container {
+      height: 100%;
+      width: 100%;
+    }
+
+    .axis--x path {
+      display: none;
+    }
+
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
+    .storyword {
+      font-family: 'Inter';
+      font-style: normal;
+      color: black;
+      font-size: 16px;
+      line-height: 166.02%;
+      margin-left: 200px;
+      margin-right: 200px;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .title {
+      position: absolute;
+      right: 10%;
+      top: 10%;
+      font-family: "Impact";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 50px;
+      line-height: 45px;
+      /* or 196% */
+      display: flex;
+      align-items: right;
+      text-align: right;
+      letter-spacing: 0.05em;
+
+      color: #424242;
+    }
+
+    .storytitle {
+      top: 6%;
+      font-size: 34px;
+      font-family: 'Times New Roman', Times, serif;
+      color: black
+    }
+
+    .title2 {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      margin: 0 0 0 -300px;
+      width: 600px;
+      height: 90px;
+      font-family: "Marion";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 40px;
+      /* or 125% */
+      text-align: center;
+      letter-spacing: 0.01em;
+      color: #141414;
+    }
+
+    .subtitle {
+      position: absolute;
+      right: 10%;
+      top: 16%;
+      font-family: "Arial";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 45px;
+      /* or 196% */
+      display: flex;
+      align-items: right;
+      text-align: right;
+      letter-spacing: 0.05em;
+
+      color: #424242;
+    }
+
+    .subtitle2 {
+      position: absolute;
+      right: 10%;
+      top: 20%;
+      font-family: "Arial";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 45px;
+      /* or 107% */
+      display: flex;
+      align-items: center;
+      text-align: right;
+      letter-spacing: 0.05em;
+      color: #424242;
+    }
+
+    .bar {
+      position: absolute;
+      right: 10%;
+      top: 26%;
+      width: 26%;
+      height: 1.5%;
+      background: linear-gradient(90deg,
+          #092e72 0%,
+          #4da2e5 57.83%,
+          #d8e7f5 102.81%);
+      border-radius: 12px;
+      transform: rotate(-180deg);
+    }
+
+    .span {
+      position: absolute;
+      right: 10%;
+      top: 29%;
+      font-family: "Arial";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 8px;
+      line-height: 11px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #727272;
+    }
+
+    .title1 {
+      position: absolute;
+      width: 886px;
+      height: 89px;
+      left: 30%;
+      top: 40%;
+      font-family: "Marion";
+      font-style: normal;
+      font-weight: 400;
+      color: black;
+      font-size: 60px;
+      line-height: 48px;
+    }
+
+    .textsubtitle1 {
+      position: absolute;
+      width: 512px;
+      height: 49px;
+      left: 30%;
+      top: 50%;
+
+      font-family: "Marion";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 24px;
+      /* or 102% */
+
+      color: #141414;
+    }
+
+    .special {
+      font-family: "Marion";
+      font-style: italic;
+      /* or 102% */
+      color: #4c76d0;
+    }
+
+    .groupmember {
+      color: black;
+      font-size: 20px;
+      font-family: 'Times New Roman', Times, serif;
+      line-height: 24px;
+
+    }
+    .logo{
+      position: absolute;
+      left: 2%;
+      top: 5%;
+      height: auto;
+      width: 60px;
+  }
+  .feedback{
+    color:black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    margin-bottom: 50px;
+    padding-bottom: 50px;
+text-align: left;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.qa{
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
+  </style>
+
+  <!--[if IE]>
+      <script type="text/javascript">
+        var console = { log: function () {} };
+      </script>
+    <![endif]-->
+</head>
+
+<body>
+
+
+  <div id="fullpage">
+    <div class="section" style="background-color: white">
+      <a href="../index.html"><img class="logo" src="../img/logo.png" /></a>
+      <div style="
+            background-image: url(./images/image7.png);
+            transform: scale(0.7, 0.7);
+            position:absolute;
+            left: 60%;
+            top: 70%;
+            width: 205px;
+            height: 50px;
+            margin: 0 0 0 0px;
+          ">
+        <ul id="menu">
+          <li data-menuanchor="secondPage" style="margin-top:13px;margin-left:-10px"><a
+              style="color:black; font-size:20px" href="#secondPage">EXPLORE</a></li>
+        </ul>
+      </div>
+      <div style="
+            position:absolute;
+            background-image: url(images/image5.png);
+            transform: scale(0.4, 0.4);
+            left: 10%;
+            top: 13%;
+            width: 600px;
+            height: 600px;
+            margin: 0 0 0 0px;
+          "></div>
+      <p class="title1" style=" text-align: left;">FROM DOLLARS TO YEARS</p>
+      <p class="textsubtitle1" style="  text-align: left;">
+        Data reveals why U.S. life expectancy is lower than most
+        <b class="special">OECD</b> developed countries</p>
+
+      <div style="position:absolute;
+          left: 0%;
+          top: 65%;
+          transform: scale(1.2, 1.2);
+          width: 2200px;
+          height: 24px;
+          margin: 0 0 0 0px;
+          background-image:url(images/image6.png)"></div>
+      </p>
+      <div>
+      </div>
+    </div>
+
+    <div class="section" style="background-image: url(images/image4.png);">
+      <div style="
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            background-color: white;
+            width: 600px;
+            height: 300px;
+            margin: -150px 0 0 -300px;
+            color: black;
+            display: flex;
+            display: -webkit-flex;
+            justify-content: center;
+            align-items: center;
+        ">
+        <p class="p2">
+          The dataset <a style="text-decoration: underline;"
+            href="https://github.com/BuzzFeedNews/2017-05-us-health-care">2017-05-US-HEALTH-CARE </a>collects life
+          expectancy and
+          health/social-related spendings in 24 OECD countries. We found
+          that the U.S. has the highest share of GPD in health-related
+          spending, but the lowest life expectancy of the 22 developed
+          countries. <br />In this data visualisation, we will analyse this
+          phenomenon and speculate on its possible causes
+        </p>
+      </div>
+    </div>
+
+    <div class="section" style="background-color: white; display: flex; align-items: center">
+      <div class="title2" style=" top:15%; left: 50%;">
+        <p>
+          LIFE EXPECTANCY OVER 22 OECD DEVELOPED COUNTRIES</p>
+      </div>
+      <div id="my_dataviz1" style="position:absolute;top:15% ;left:10%;right:10%;"></div>
+    </div>sss
+
+    <div class="section" style="background-color: white">
+
+      <div class="title2">
+        <p>
+          THE COMPARISON OF SPENDING ON HEALTH CARE AND SOCIAL PROGRAMS IN 2014
+        </p>
+      </div>
+      <div id="my_dataviz2" style="position:absolute;top:25% ;left:10%;right:10%;transform: scale(0.8, 0.8);"></div>
+
+    </div>
+    <div class="section" style="background-image: url(images/image2.png);">
+      <p class="title">2014</p>
+      <p class="subtitle">STATE LIFE EXPECTANCY</p>
+      <p class="subtitle2">IN THE US</p>
+      <div class="bar"></div>
+      <p class="span">
+        74.5 75.0 75.5 76.0 76.5 77.0 77.5 78.0 78.5 79.0 79.5 80.0 80.5 81.0
+        81.5 82.0 (years)
+      </p>
+      <div id="usa"></div>
+    </div>
+    <div class="section" style="background-image: url(images/image2.png);">
+      <p class="title">1980-2014, %CHANGE</p>
+      <p class="subtitle">STATE LIFE EXPECTANCY</p>
+      <p class="subtitle2">IN THE US</p>
+      <div class="bar" style="
+            background: linear-gradient(90deg, #1b1b1b 0%, #e3e3e3 102.81%);
+            width: 16%;
+          "></div>
+      <p class="span">
+        3&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp4&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp5&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp6&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp7&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp8&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp9&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp10&nbsp&nbsp(%)
+      </p>
+      <div id="usa2" class="container"></div>
+    </div>
+   
+
+  </div>
+  
+
+  <script type="text/javascript" src="dist/fullpage.js"></script>
+  <script type="text/javascript" src="js/examples.js"></script>
+  <script type="text/javascript">
+    var myFullpage = new fullpage("#fullpage", {
+      licenseKey: "0HKX8-A6QRK-DIJM8-5QP4J-XMRZL",
+      anchors: ['firstPage', 'secondPage'],
+      navigation: true,
+      showActiveTooltip: true,
+    });
+  </script>
+  <script src="js/map.js"></script>
+  <script src="js/map2.js"></script>
+  <script src="js/tabel1.js"></script>
+  <script src="js/tabel2.js"></script>
+</body>
+
+</html>
